@@ -52,7 +52,6 @@
     @endif
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <!-- Welcome Section -->
         @auth
             <div class="mb-12">
                 <div class="bg-green-600 rounded-2xl shadow-xl overflow-hidden">
@@ -119,14 +118,61 @@
             </div>
         @endauth
 
-        <!-- Products Section -->
         <div class="mb-12">
-            <div class="flex items-center justify-between mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 gap-4">
                 <div>
                     <h2 class="text-3xl font-bold text-gray-900">Produk Terbaru</h2>
-                    <p class="text-gray-600 mt-1">Koleksi produk pilihan terbaru dari kami</p>
+                    <p class="text-gray-600 mt-1">
+                        Koleksi produk pilihan terbaru dari kami
+                    </p>
                 </div>
+
+                <div class="relative">
+    <button
+        type="button"
+        id="categoryButton"
+        onclick="toggleCategoryDropdown()"
+        class="flex items-center justify-between gap-3
+               min-w-[220px] px-4 py-3
+               bg-white border border-gray-300 rounded-xl
+               text-sm font-medium text-gray-700
+               hover:bg-gray-50 focus:outline-none
+               focus:ring focus:ring-green-200"
+    >
+        <span>
+            {{ optional($categories->firstWhere('id', request('category')))->name ?? 'Semua Kategori' }}
+        </span>
+
+        <svg class="w-4 h-4 text-gray-500 transition-transform" id="categoryArrow"
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M19 9l-7 7-7-7"/>
+        </svg>
+    </button>
+
+    <div
+        id="categoryDropdown"
+        class="hidden absolute right-0 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg z-20 overflow-hidden">
+        <a
+            href="{{ route('home') }}"
+            class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100"
+        >
+            Semua Kategori
+        </a>
+
+        @foreach($categories as $category)
+            <a
+                href="{{ route('home', ['category' => $category->id]) }}"
+                class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100
+                       {{ request('category') == $category->id ? 'bg-green-50 font-semibold text-green-700' : '' }}"
+            >
+                {{ $category->name }}
+            </a>
+        @endforeach
+    </div>
+    </div>
             </div>
+
 
             @if($foods->count() > 0)
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -148,6 +194,10 @@
 
                                 <!-- Product Info -->
                                 <div class="p-5 flex flex-col flex-1">
+                                    <!-- kategori -->
+                                    <span class="text-xs font-medium text-green-600 mb-1">
+                                        {{ $food->category->name }}
+                                    </span>
                                     <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition">
                                         {{ $food->name }}
                                     </h3>
@@ -212,8 +262,27 @@
                 </div>
             @endif
         </div>
-
-        
     </div>
 </div>
+<script>
+    function toggleCategoryDropdown() {
+        const dropdown = document.getElementById('categoryDropdown');
+        const arrow = document.getElementById('categoryArrow');
+
+        dropdown.classList.toggle('hidden');
+        arrow.classList.toggle('rotate-180');
+    }
+
+    document.addEventListener('click', function (event) {
+        const button = document.getElementById('categoryButton');
+        const dropdown = document.getElementById('categoryDropdown');
+        const arrow = document.getElementById('categoryArrow');
+
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+        }
+    });
+</script>
+
 @endsection

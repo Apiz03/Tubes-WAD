@@ -12,7 +12,10 @@ class CartController extends Controller
     public function indexCart()
     {
         $carts = Cart::with('food')->where('user_id', Auth::id())->get();
-        return view('cart.index', compact('carts'));
+        $totalPrice = $carts->sum(function ($cart) {
+            return $cart->food->price * $cart->quantity;
+        });
+        return view('cart.index', compact('carts', 'totalPrice'));
     }
 
     public function addToCart(Request $request, $foodId)
@@ -62,6 +65,8 @@ class CartController extends Controller
             'Item berhasil dihapus dari keranjang.'
         );
     }
+
+
 
 
 }

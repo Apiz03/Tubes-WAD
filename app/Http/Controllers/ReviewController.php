@@ -37,7 +37,24 @@ class ReviewController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // not used
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'comment' => 'nullable|string|max:1000',
+        ]);
+
+        $review = Review::findOrFail($id);
+
+        // Pastikan hanya pemilik review yang dapat mengedit
+        if (Auth::id() !== $review->user_id) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki izin untuk mengedit review ini.');
+        }
+
+        $review->rating = $request->rating;
+        $review->comment = $request->comment;
+        $review->save();
+
+        session()->flash('success', 'Review berhasil diperbarui!');
+        return redirect()->route('foods.show', ['food' => $review->food_id]);
     }
 
     public function destroy(string $id)

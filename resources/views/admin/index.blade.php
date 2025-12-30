@@ -79,15 +79,104 @@
     </div>
 
     
-
+            
     <!-- Products Grid -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
-        @if($foods->count() > 0)
-            <div class="p-6 border-b border-gray-200">
-                <h2 class="text-2xl font-bold text-gray-900">Daftar Makanan</h2>
-                <p class="text-gray-600 text-sm mt-1">Kelola, edit, atau hapus makanan sesuai kebutuhan</p>
-            </div>
+        <div class="lg:col-span-4">
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-4">
 
+                <!-- Header -->
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-sm font-semibold text-gray-700">
+                        Kategori
+                    </h3>
+                    <span class="text-xs text-gray-400">
+                        {{ $categories->count() }} kategori
+                    </span>
+                </div>
+
+                <!-- Tambah kategori -->
+                <form action="{{ route('admin.categories.store') }}" method="POST" class="flex gap-2 mb-4">
+                    @csrf
+                    <input
+                        type="text"
+                        name="name"
+                        required
+                        placeholder="Tambah kategori baru"
+                        class="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring focus:ring-green-200"
+                    >
+                    <button
+                        class="bg-green-600 hover:bg-green-700 text-white px-4 rounded-lg text-sm font-semibold transition"
+                    >
+                        Tambah
+                    </button>
+                </form>
+
+                <!-- List kategori -->
+                <ul class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                    @foreach($categories as $category)
+                        <li class="group flex items-center justify-between bg-white border border-gray-200 rounded-lg px-3 py-2 hover:shadow-sm transition">
+
+                            <!-- Nama kategori -->
+                            <span class="text-sm text-gray-800 truncate">
+                                {{ $category->name }}
+                            </span>
+
+                            <!-- Aksi -->
+                            <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+
+                                <!-- Edit -->
+                                <form
+                                    action="{{ route('admin.categories.update', $category) }}"
+                                    method="POST"
+                                    class="flex items-center gap-1"
+                                >
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value="{{ $category->name }}"
+                                        class="hidden group-hover:inline-block w-28 px-2 py-1 border rounded-md text-xs"
+                                    >
+
+                                    <button
+                                        type="submit"
+                                        class="text-blue-600 text-xs font-semibold"
+                                        title="Simpan perubahan"
+                                    >
+                                        Edit
+                                    </button>
+                                </form>
+
+                                <!-- Delete -->
+                                <form
+                                    action="{{ route('admin.categories.destroy', $category) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Hapus kategori ini?')"
+                                >
+                                    @csrf
+                                    @method('DELETE')
+                                    <button
+                                        class="text-red-600 text-xs font-semibold"
+                                        title="Hapus kategori"
+                                    >
+                                        Hapus
+                                    </button>
+                                </form>
+
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+
+            </div>
+        </div>
+
+
+
+        @if($foods->count() > 0)
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-6">
                 @foreach ($foods as $food)
                     <div class="group bg-white border border-gray-200 rounded-xl hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col">

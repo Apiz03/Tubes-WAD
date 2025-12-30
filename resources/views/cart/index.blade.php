@@ -15,6 +15,10 @@
                     
                     <!-- Info Produk -->
                     <div>
+                        <!-- kategori -->
+                        <span class="text-xs font-medium text-green-600 mb-1">
+                            {{ $cart->food->category->name }}
+                        </span>
                         <h2 class="font-semibold text-lg">
                             {{ $cart->food->name }}
                         </h2>
@@ -54,6 +58,131 @@
                 </div>
             @endforeach
         </div>
+        <div class="mt-10 flex justify-end">
+                <div class="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+
+                    <!-- Header -->
+                    <div class="px-6 py-4 bg-gray-50 border-b">
+                        <h3 class="text-lg font-semibold text-gray-800">
+                            Ringkasan Pembayaran
+                        </h3>
+                        <p class="text-sm text-gray-500 mt-1">
+                            Pastikan pesanan Anda sudah benar
+                        </p>
+                    </div>
+
+                    <!-- Total -->
+                    <div class="px-6 py-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <span class="text-gray-700 font-medium">
+                                Total Pembayaran
+                            </span>
+                            <span class="text-3xl font-bold text-green-600">
+                                Rp {{ number_format($totalPrice, 0, ',', '.') }}
+                            </span>
+                        </div>
+
+                        <!-- CTA -->
+                        <form method="POST" action="{{ route('checkout.process') }}">
+                            @csrf
+                            <button
+                                type="button"
+                                onclick="openPaymentModal()"
+                                class="w-full flex items-center justify-center gap-2
+                                    bg-green-600 hover:bg-green-700
+                                    text-white font-semibold py-4 rounded-xl
+                                    transition-all duration-300
+                                    transform hover:scale-[1.02] active:scale-95"
+                            >
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17 9V7a5 5 0 00-10 0v2M5 9h14l-1.5 12h-11L5 9z"/>
+                                </svg>
+                                <span>Lanjutkan ke Checkout</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Footer trust -->
+                    <div class="px-6 py-4 bg-gray-50 border-t text-center">
+                        <p class="text-xs text-gray-500">
+                            Pembayaran aman dan diproses secara real-time
+                        </p>
+                    </div>
+
+                </div>
+        </div>
     @endif
 </div>
+
+<div id="paymentModal"
+     class="hidden fixed inset-0 z-50 flex items-center justify-center">
+
+    <!-- overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-50"
+         onclick="closePaymentModal()"></div>
+
+    <!-- modal -->
+    <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+
+        <h3 class="text-xl font-bold text-gray-900 mb-2">
+            Pilih Metode Pembayaran
+        </h3>
+        <p class="text-sm text-gray-500 mb-6">
+            Silakan pilih metode pembayaran untuk melanjutkan
+        </p>
+
+        <form method="POST" action="{{ route('checkout.process') }}">
+            @csrf
+
+            <!-- metode -->
+            <div class="space-y-3 mb-6">
+
+                <label class="flex items-center gap-3 border rounded-xl p-4 cursor-pointer hover:border-green-500">
+                    <input type="radio" name="payment_method" value="cash" required>
+                    <span class="font-medium">Bayar di Tempat (Cash)</span>
+                </label>
+
+                <label class="flex items-center gap-3 border rounded-xl p-4 cursor-pointer hover:border-green-500">
+                    <input type="radio" name="payment_method" value="qris" required>
+                    <span class="font-medium">QRIS</span>
+                </label>
+
+                <label class="flex items-center gap-3 border rounded-xl p-4 cursor-pointer hover:border-green-500">
+                    <input type="radio" name="payment_method" value="ewallet" required>
+                    <span class="font-medium">E-Wallet</span>
+                </label>
+
+            </div>
+
+            <!-- aksi -->
+            <div class="flex gap-3">
+                <button type="button"
+                        onclick="closePaymentModal()"
+                        class="flex-1 border rounded-xl py-3">
+                    Batal
+                </button>
+
+                <button type="submit"
+                        class="flex-1 bg-green-600 hover:bg-green-700 text-white rounded-xl py-3 font-semibold">
+                    Bayar Sekarang
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function openPaymentModal() {
+        document.getElementById('paymentModal').classList.remove('hidden');
+    }
+
+    function closePaymentModal() {
+        document.getElementById('paymentModal').classList.add('hidden');
+    }
+</script>
+
+
 @endsection

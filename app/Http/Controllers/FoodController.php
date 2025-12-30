@@ -17,7 +17,8 @@ class FoodController extends Controller
     public function index()
     {
         $foods = Food::latest()->get();
-        return view('admin.index', compact('foods'));
+        $categories = Category::all();
+        return view('admin.index', compact('foods', 'categories'));
     }
     
     /**
