@@ -125,37 +125,70 @@
     <!-- modal -->
     <div class="relative bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
 
-        <h3 class="text-xl font-bold text-gray-900 mb-2">
-            Pilih Metode Pembayaran
+        <h3 class="text-xl font-bold text-gray-900 mb-1">
+            Data & Pembayaran
         </h3>
-        <p class="text-sm text-gray-500 mb-6">
-            Silakan pilih metode pembayaran untuk melanjutkan
+        <p class="text-sm text-gray-500 mb-4">
+            Lengkapi data sebelum melanjutkan pembayaran
         </p>
+
+        <!-- ERROR VALIDATION -->
+        @if ($errors->any())
+            <div class="mb-4 bg-red-50 border border-red-200 text-red-700 rounded-lg p-3 text-sm">
+                <ul class="list-disc list-inside">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('checkout.process') }}">
             @csrf
 
-            <!-- metode -->
-            <div class="space-y-3 mb-6">
-
-                <label class="flex items-center gap-3 border rounded-xl p-4 cursor-pointer hover:border-green-500">
-                    <input type="radio" name="payment_method" value="cash" required>
-                    <span class="font-medium">Bayar di Tempat (Cash)</span>
-                </label>
-
-                <label class="flex items-center gap-3 border rounded-xl p-4 cursor-pointer hover:border-green-500">
-                    <input type="radio" name="payment_method" value="qris" required>
-                    <span class="font-medium">QRIS</span>
-                </label>
-
-                <label class="flex items-center gap-3 border rounded-xl p-4 cursor-pointer hover:border-green-500">
-                    <input type="radio" name="payment_method" value="ewallet" required>
-                    <span class="font-medium">E-Wallet</span>
-                </label>
-
+            <!-- Nama -->
+            <div class="mb-3">
+                <label class="text-sm font-medium text-gray-700">Nama Penerima</label>
+                <input type="text" name="name" value="{{ old('name') }}"
+                       class="w-full mt-1 border rounded-xl px-4 py-2 focus:ring focus:ring-green-200"
+                       required>
             </div>
 
-            <!-- aksi -->
+            <!-- Nomor HP -->
+            <div class="mb-3">
+                <label class="text-sm font-medium text-gray-700">Nomor HP</label>
+                <input type="text" name="Nomor" value="{{ old('Nomor') }}"
+                       class="w-full mt-1 border rounded-xl px-4 py-2 focus:ring focus:ring-green-200"
+                       required>
+            </div>
+
+            <!-- Alamat -->
+            <div class="mb-3">
+                <label class="text-sm font-medium text-gray-700">Alamat Pengiriman</label>
+                <textarea name="Alamat" rows="3"
+                          class="w-full mt-1 border rounded-xl px-4 py-2 focus:ring focus:ring-green-200"
+                          required>{{ old('Alamat') }}</textarea>
+            </div>
+
+            <!-- Metode Pembayaran -->
+            <div class="space-y-2 mb-5">
+                <label class="flex items-center gap-3 border rounded-xl p-3 cursor-pointer">
+                    <input type="radio" name="Metode_Pembayaran" value="cash" required>
+                    <span>Bayar di Tempat (Cash)</span>
+                </label>
+
+                <label class="flex items-center gap-3 border rounded-xl p-3 cursor-pointer">
+                    <input type="radio" name="Metode_Pembayaran" value="qris">
+                    <span>QRIS</span>
+                </label>
+
+                <label class="flex items-center gap-3 border rounded-xl p-3 cursor-pointer">
+                    <input type="radio" name="Metode_Pembayaran" value="ewallet">
+                    <span>E-Wallet</span>
+                </label>
+            </div>
+
+            <!-- Aksi -->
             <div class="flex gap-3">
                 <button type="button"
                         onclick="closePaymentModal()"
@@ -165,15 +198,22 @@
 
                 <button type="submit"
                         class="flex-1 bg-green-600 hover:bg-green-700 text-white rounded-xl py-3 font-semibold">
-                    Bayar Sekarang
+                    Konfirmasi & Bayar
                 </button>
             </div>
-
         </form>
     </div>
 </div>
 
 
+
+@if ($errors->any())
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        openPaymentModal();
+    });
+</script>
+@endif
 <script>
     function openPaymentModal() {
         document.getElementById('paymentModal').classList.remove('hidden');

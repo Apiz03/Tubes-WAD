@@ -68,6 +68,22 @@
 
                                 @endif
                             </a>
+
+                            <!-- icon status -->
+                            <a href="{{ route('status.index') }}" class="relative inline-flex items-center p-2 text-gray-700 hover:text-blue-600">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32" fill="currentColor" aria-hidden="true">
+                                    <path d="M12 2a10 10 0 1 0 10 10A10.011 10.011 0 0 0 12 2zm1 15h-2v-6h2zm0-8h-2V7h2z"></path>
+                                </svg>
+                                @php
+                                    $statusCount = Auth::user()->statuses()->count();
+                                @endphp
+                                @if($statusCount > 0)
+                                <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold text-white bg-red-600 rounded-full translate-x-1/3 -translate-y-1/4">
+                                    {{ $statusCount }}
+                                </span>
+                                @endif
+                            </a>
+
                         @endif
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white font-semibold text-sm">
                                     {{ substr(Auth::user()->name, 0, 1) }}

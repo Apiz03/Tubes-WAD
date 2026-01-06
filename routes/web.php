@@ -24,7 +24,10 @@ Route::middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
     Route::post('/cart/add/{foodId}', [App\Http\Controllers\CartController::class, 'addToCart'])->name('cart.add');
     Route::get('/cart', [App\Http\Controllers\CartController::class, 'indexCart'])->name('cart.index');
     Route::delete('/cart/remove/{cartId}', [App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
-    route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout.process');
+    Route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout.process');
+    Route::get('/statuses', [App\Http\Controllers\StatusController::class, 'index'])->name('status.index');
+    Route::get('/statuses/{statusId}/edit', [App\Http\Controllers\StatusController::class, 'edit'])->name('status.edit');
+    Route::put('/statuses/{statusId}/update', [App\Http\Controllers\StatusController::class, 'update'])->name('status.update');
 });
 
 

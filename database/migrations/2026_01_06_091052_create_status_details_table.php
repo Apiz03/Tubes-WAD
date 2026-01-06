@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('restaurants', function (Blueprint $table) {
+        Schema::create('status_details', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->foreignId('status_id')->constrained('statuses')->onDelete('cascade');
+            $table->foreignId('food_id')->constrained('foods')->onDelete('cascade');
+            $table->unsignedInteger('quantity')->default(1);
+            $table->decimal('subtotal', 12, 2)->default(0);
             $table->timestamps();
         });
     }
@@ -23,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('restaurants');
+        Schema::dropIfExists('status_details');
     }
 };

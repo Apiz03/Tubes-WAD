@@ -66,4 +66,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Cart::class);
     }
+
+    public function statuses()
+    {
+        return $this->hasMany(\App\Models\Status::class);
+    }
 }
