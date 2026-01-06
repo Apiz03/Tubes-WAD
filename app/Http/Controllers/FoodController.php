@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Food;
 use App\Models\Category;
+use App\Models\Restaurant;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 
@@ -18,7 +19,8 @@ class FoodController extends Controller
     {
         $foods = Food::latest()->get();
         $categories = Category::all();
-        return view('admin.index', compact('foods', 'categories'));
+        $restaurants = Restaurant::all();
+        return view('admin.index', compact('foods', 'categories', 'restaurants'));
     }
     
     /**
@@ -28,8 +30,10 @@ class FoodController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view ('admin.create', compact('categories'));
+        $restaurants = Restaurant::all();
+        return view ('admin.create', compact('categories', 'restaurants'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -42,10 +46,11 @@ class FoodController extends Controller
             'description' => 'required|string',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'restaurant_id' => 'required|exists:restaurants,id',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        $foodData = $request->only('name', 'description', 'price', 'category_id', 'user_id');
+        $foodData = $request->only('name', 'description', 'price', 'category_id', 'user_id', 'restaurant_id');
 
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');
@@ -55,6 +60,7 @@ class FoodController extends Controller
         $foods = new Food([
             'name' => $request->name,
             'category_id' => $request->category_id,
+            'restaurant_id' => $request->restaurant_id,
             'description' => $request->description,
             'image' => $foodData['image'] ?? null,
             'price' => $request->price,
@@ -88,7 +94,8 @@ class FoodController extends Controller
     {
         $food = Food::findOrFail($id);
         $categories = Category::all();
-        return view('admin.edit', compact('food', 'categories'));
+        $restaurants = Restaurant::all();
+        return view('admin.edit', compact('food', 'categories', 'restaurants'));
 
     }
 
@@ -104,11 +111,11 @@ class FoodController extends Controller
             'description' => 'required|string',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'restaurant_id' => 'required|exists:restaurants,id',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        $foodData = $request->only('name', 'description', 'price', 'category_id');
-
+        $foodData = $request->only('name', 'description', 'price', 'category_id', 'restaurant_id');
         if ($request->hasFile('image')) {
             if ($food->image) {
                 Storage::delete('public/' . $food->image);

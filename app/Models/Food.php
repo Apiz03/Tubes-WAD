@@ -18,6 +18,7 @@ class Food extends Model
         'price',
         'user_id',
         'category_id',
+        'restaurant_id',
     ];
 
     public function user()
@@ -36,5 +37,9 @@ class Food extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+    public function restaurant()
+    {
+        return $this->belongsTo(Restaurant::class);
     }
 }

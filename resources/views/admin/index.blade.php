@@ -78,8 +78,96 @@
         </div>
     </div>
 
-    
-            
+
+        <!-- RESTAURANT -->
+        <div class="mt-6 bg-gray-50 border border-gray-200 rounded-xl p-4">
+
+            <!-- Header -->
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-semibold text-gray-700">
+                    Restoran
+                </h3>
+                <span class="text-xs text-gray-400">
+                    {{ $restaurants->count() }} restoran
+                </span>
+            </div>
+
+            <!-- Tambah restoran -->
+            <form action="{{ route('admin.restaurants.store') }}" method="POST" class="flex gap-2 mb-4">
+                @csrf
+                <input
+                    type="text"
+                    name="name"
+                    required
+                    placeholder="Tambah restoran baru"
+                    class="flex-1 px-3 py-2 border rounded-lg text-sm focus:ring focus:ring-green-200"
+                >
+                <button
+                    class="bg-green-600 hover:bg-green-700 text-white px-4 rounded-lg text-sm font-semibold transition"
+                >
+                    Tambah
+                </button>
+            </form>
+
+            <!-- List restoran -->
+            <ul class="space-y-2 max-h-64 overflow-y-auto pr-1">
+                @foreach($restaurants as $restaurant)
+                    <li class="group flex items-center justify-between bg-white border border-gray-200 rounded-lg px-3 py-2 hover:shadow-sm transition">
+
+                        <!-- Nama restoran -->
+                        <span class="text-sm text-gray-800 truncate">
+                            {{ $restaurant->name }}
+                        </span>
+
+                        <!-- Aksi -->
+                        <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+
+                            <!-- Edit -->
+                            <form
+                                action="{{ route('admin.restaurants.update', $restaurant) }}"
+                                method="POST"
+                                class="flex items-center gap-1"
+                            >
+                                @csrf
+                                @method('PUT')
+
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value="{{ $restaurant->name }}"
+                                    class="hidden group-hover:inline-block w-28 px-2 py-1 border rounded-md text-xs"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="text-blue-600 text-xs font-semibold"
+                                >
+                                    Edit
+                                </button>
+                            </form>
+
+                            <!-- Delete -->
+                            <form
+                                action="{{ route('admin.restaurants.destroy', $restaurant) }}"
+                                method="POST"
+                                onsubmit="return confirm('Hapus restoran ini?')"
+                            >
+                                @csrf
+                                @method('DELETE')
+                                <button
+                                    class="text-red-600 text-xs font-semibold"
+                                >
+                                    Hapus
+                                </button>
+                            </form>
+
+                        </div>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+
+
     <!-- Products Grid -->
     <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
         <div class="lg:col-span-4">
@@ -195,6 +283,17 @@
 
                         <!-- Product Details -->
                         <div class="p-5 flex flex-col flex-1">
+
+                        <!-- restaurant name -->
+                            <p class="text-lg font-bold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition">
+                                {{ ($food->restaurant) ? $food->restaurant->name : $restaurant->name }}
+                            </p>
+                        
+                        <!-- category -->
+                            <p class="text-sm text-gray-500 mb-1">
+                                Kategori: {{ $food->category->name }}
+                            </p>
+
                             <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition">
                                 {{ $food->name }}
                             </h3>

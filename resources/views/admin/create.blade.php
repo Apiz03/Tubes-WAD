@@ -22,6 +22,29 @@
             <form method="POST" action="{{ route('admin.store') }}" enctype="multipart/form-data" class="p-8 sm:p-10">
                 @csrf
 
+            <!-- restaurant -->
+                <div class="mb-8">
+                    <label for="restaurant_id" class="block text-sm font-semibold text-gray-900 mb-3">Restoran <span class="text-red-500">*</span></label>
+                    <select name="restaurant_id" id="restaurant_id" 
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-600 focus:border-transparent transition @error('restaurant_id') border-red-500 @enderror" 
+                        required>
+                        <option value="">Pilih Restoran</option>
+                        @foreach($restaurants as $restaurant)
+                            <option value="{{ $restaurant->id }}" {{ old('restaurant_id') == $restaurant->id ? 'selected' : '' }}>
+                                {{ $restaurant->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('restaurant_id')
+                        <p class="text-red-500 text-sm mt-2 flex items-center space-x-1">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                            </svg>
+                            <span>{{ $message }}</span>
+                        </p>
+                    @enderror
+                </div>
+
                 <!-- Nama Produk -->
                 <div class="mb-8">
                     <label for="name" class="block text-sm font-semibold text-gray-900 mb-3">Nama Makanan <span class="text-red-500">*</span></label>

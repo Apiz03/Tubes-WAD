@@ -25,7 +25,6 @@ Route::middleware(['auth', 'role:admin,mahasiswa'])->group(function () {
     Route::get('/cart', [App\Http\Controllers\CartController::class, 'indexCart'])->name('cart.index');
     Route::delete('/cart/remove/{cartId}', [App\Http\Controllers\CartController::class, 'removeFromCart'])->name('cart.remove');
     route::post('/checkout', [App\Http\Controllers\CheckoutController::class, 'checkout'])->name('checkout.process');
-    
 });
 
 
@@ -40,6 +39,12 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
         'store' => 'admin.categories.store',
         'update' => 'admin.categories.update',
         'destroy' => 'admin.categories.destroy',
+    ]);
+
+    Route::resource('restaurants', App\Http\Controllers\RestaurantController::class)->except(['index', 'show', 'create', 'edit'])->names([
+        'store' => 'admin.restaurants.store',
+        'update' => 'admin.restaurants.update',
+        'destroy' => 'admin.restaurants.destroy',
     ]);
     
 });

@@ -78,6 +78,13 @@
                 <!-- Product Details -->
                 <div class="flex flex-col justify-between">
                     <div>
+
+                        <!-- restaurant -->
+                        <span class="text-sm font-medium text-green-600 mb-2 inline-block">
+                            {{ $food->restaurant->name }}
+                        </span>
+                        <h1 class="text-4xl font-bold text-gray-900 mb-2">{{ $food->restaurant->name }}</h1>
+
                         <!-- kategori -->
                         <span class="text-xs font-medium text-green-600 mb-1">
                             {{ $food->category->name }}
