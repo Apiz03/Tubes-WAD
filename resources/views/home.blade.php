@@ -141,30 +141,28 @@
                     id="restaurantButton"
                     onclick="toggleRestaurantDropdown()"
                     class="flex items-center justify-between gap-3
-                           min-w-[220px] px-4 py-3
-                           bg-white border border-gray-300 rounded-xl
-                           text-sm font-medium text-gray-700
-                           hover:bg-gray-50 focus:outline-none
-                           focus:ring focus:ring-green-200">
+                            min-w-[220px] px-4 py-3 bg-white border border-gray-300 rounded-xl text-sm font-medium text-gray-700
+                            hover:bg-gray-50 focus:outline-none
+                            focus:ring focus:ring-green-200">
                     <span>
                         {{ optional($restaurants->firstWhere('id', request('restaurant')))->name ?? 'Semua Resto' }}
                     </span>
 
                     <svg id="restaurantArrow"
-                         class="w-4 h-4 text-gray-500 transition-transform"
-                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        class="w-4 h-4 text-gray-500 transition-transform"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M19 9l-7 7-7-7"/>
+                            d="M19 9l-7 7-7-7"/>
                     </svg>
                 </button>
 
                 <div
                     id="restaurantDropdown"
                     class="hidden absolute left-0 mt-2 w-full
-                           bg-white border border-gray-200
-                           rounded-xl shadow-lg z-20 overflow-hidden">
+                        bg-white border border-gray-200
+                        rounded-xl shadow-lg z-20 overflow-hidden">
                     <a href="{{ route('home') }}"
-                       class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
+                        class="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-100">
                         Semua Resto
                     </a>
 
@@ -172,7 +170,7 @@
                         <a
                             href="{{ route('home', ['restaurant' => $restaurant->id]) }}"
                             class="block px-4 py-3 text-sm hover:bg-gray-100
-                                   {{ request('restaurant') == $restaurant->id
+                                    {{ request('restaurant') == $restaurant->id
                                         ? 'bg-green-50 font-semibold text-green-700'
                                         : 'text-gray-700' }}">
                             {{ $restaurant->name }}

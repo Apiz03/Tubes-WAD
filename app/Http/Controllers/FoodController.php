@@ -105,24 +105,24 @@ class FoodController extends Controller
 
     public function update(Request $request, string $id)
     {
+        // dd(request()->all());
         $food = Food::findOrFail($id);
         $request->validate([
             'name'        => 'required|string',
             'description' => 'required|string',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
-            'restaurant_id' => 'required|exists:restaurants,id',
             'image'       => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
 
-        $foodData = $request->only('name', 'description', 'price', 'category_id', 'restaurant_id');
+        $foodData = $request->only('name', 'description', 'price', 'category_id');
         if ($request->hasFile('image')) {
             if ($food->image) {
                 Storage::delete('public/' . $food->image);
             }
 
             $imagePath = $request->file('image')->store('products', 'public');
-            $productData['image'] = $imagePath;
+            $foodData['image'] = $imagePath;
         }
 
         $food->update($foodData);
